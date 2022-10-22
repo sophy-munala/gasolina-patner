@@ -9,14 +9,14 @@ if (!isset($customer_id)) {
 	header('location:customer_login.php');
 }
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['order_now'])) {
     # code...
     $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $tel_no =  $_POST['tel_no'];
     $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $tel_no =  $_POST['tel_no'];
     $payment_method = mysqli_real_escape_string($conn, $_POST['payment_method']);
     $address = mysqli_real_escape_string($conn, 'flat no.'.$_POST['flat'].','. $_POST['street'].','. $_POST['county']);
-    $placed_on = date('d-m-y');
+    $placed_on = date('d-M-Y');
 
     $cart_total = 0;
     $cart_products[] = '';
@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
     $total_products = implode(', ',$cart_products);
 
     $order_query = mysqli_query($conn, "SELECT * FROM `orders` 
-    WHERE name = '$nam' AND tel_no = '$tel_no' AND email = '$email' 
+    WHERE name = '$name' AND email = '$email' AND tel_no = '$tel_no'  
     AND payment_method = '$payment_method' AND address = '$address' AND 
     total_products = '$total_products' AND total_price = '$cart_total'")or die('query failed');
 
@@ -44,10 +44,10 @@ if (isset($_POST['submit'])) {
         if(mysqli_num_rows($order_query)> 0){
             $message[] = 'Order already placed!!';
         }else{
-        mysqli_query($conn, "INSERT INTO `orders` (customer_id, name, tel_no, email, payment_method, addres, total_products, total_price, placed_on)
-         VALUES('$customer_id', '$name', '$tel_no', '$email', '$payment_method', '$address', '$total_products', '$cart_total', '$placed_on')")or die('query failed');
+        mysqli_query($conn, "INSERT INTO `orders`(customer_id, name, email, tel_no, payment_method, address, total_products, total_price, placed_on)
+         VALUES('$customer_id', '$name', '$email', '$tel_no', '$payment_method', '$address', '$total_products', '$cart_total', '$placed_on')")or die('query failed');
          $message[] = 'Order placed succesfully!!';
-         mysqli_query($cann, "DELETE FROM `cart` WHERE customer_id = '$customer_id'")or die('query failed');
+         mysqli_query($conn, "DELETE FROM `cart` WHERE customer_id = '$customer_id'")or die('query failed');
     }
   }
 }
@@ -95,22 +95,24 @@ if (isset($_POST['submit'])) {
             <span><?php echo $grand_total;?></span>/-
         </div>
     </section>
+
     <section class="checkout">
         <form action="" method="post">
-            <h3>Place Your orders</h3>
+            <h3>Place Your orders Details</h3>
             <div class="flex">
                 <div class="inputbox">
                     <span>Name</span>
                     <input type="text" name="name" placeholder=" your name">
                 </div>
                 <div class="inputbox">
-                    <span> Number</span>
-                    <input type="number" name="tel_no" placeholder=" your number">
-                </div>
-                <div class="inputbox">
                     <span>Email:</span>
                     <input type="email" name="email" placeholder=" your email">
                 </div>
+                <div class="inputbox">
+                    <span> Number</span>
+                    <input type="number" name="tel_no" placeholder=" your number">
+                </div>
+               
                 <div class="inputbox">
                     <span>Payment method:</span>
                     <select name="payment method" id="">
@@ -132,7 +134,8 @@ if (isset($_POST['submit'])) {
                     <input type="text" name="county" placeholder=" e.g your county">
                 </div>
             </div>
-            <a href="transaction_page.php" class="option-btn" name="submit">Proceed to Pay</a>
+            <input type="submit" value="Order now" class="btn" name="order_now">
+            <a href="payment.php" class="option-btn" name="submit">Proceed to Pay</a>
             
         </form>
 
