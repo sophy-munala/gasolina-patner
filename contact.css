@@ -1,0 +1,30 @@
+*contact section*/
+.contact.form{
+    margin: 0 auto;
+    background-color: var(--light-color);
+    border: var(--border);
+    border-radius: .5rem;
+    padding: 2rem;
+    max-width: 60rem;
+    text-align: center;
+}
+.contact.form h3{
+    font-size: 3rem;
+    text-transform: uppercase;
+    color: black;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+.contact.form .box{
+    width: 100%;
+    margin: 1 rem 0;
+    border: var(--border);
+    background-color: whitesmoke;
+    padding: 1.2rem 1.4rem;
+    color: black;
+    font-size: 1.8rem;
+}
+.contact.form textarea{
+height: 25rem;
+resize: none;
+}
